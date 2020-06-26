@@ -1,13 +1,16 @@
 import React from "react";
 import "./App.css";
 import Navigation from "./Components/Navigation";
-import NewWorkOrder from "./Components/NewWorkOrder";
+import NewWorkOrderHookForm from "./Components/NewWorkOrderHookForm";
+import { StylesProvider } from "@material-ui/core/styles";
 
 function App() {
   return (
     <div className="App">
-      <Navigation />
-      <NewWorkOrder />
+      <StylesProvider injectFirst>
+        <Navigation />
+        <NewWorkOrderHookForm />
+      </StylesProvider>
     </div>
   );
 }

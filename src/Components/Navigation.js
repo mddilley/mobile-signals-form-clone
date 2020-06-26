@@ -12,9 +12,7 @@ import styled from "styled-components";
 
 const Navigation = () => {
   const StyledAppBar = styled(AppBar)`
-    && {
-      background-color: #0d3e79;
-    }
+    background-color: #0d3e79;
   `;
 
   const LoginButton = styled(Button)`
