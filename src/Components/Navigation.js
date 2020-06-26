@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Button
-} from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import styled from "styled-components";
 
@@ -15,11 +10,11 @@ const Navigation = () => {
     background-color: #0d3e79;
   `;
 
-  const LoginButton = styled(Button)`
-    && {
-      position: absolute;
-      right: 0;
-    }
+  const StyledAccountCircleIcon = styled(AccountCircleIcon)`
+    position: absolute;
+    right: 20px;
+    font-size: 36px;
+    color: white;
   `;
 
   return (
@@ -29,7 +24,7 @@ const Navigation = () => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6">Mobile Signals Work Order</Typography>
-        <LoginButton color="inherit">Login</LoginButton>
+        <StyledAccountCircleIcon />
       </Toolbar>
     </StyledAppBar>
   );

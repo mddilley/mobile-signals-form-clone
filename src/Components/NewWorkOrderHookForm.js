@@ -1,41 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
+import axios from "axios";
 import { DevTool } from "react-hook-form-devtools";
 import {
-  Select,
   MenuItem,
   Container,
   Typography,
   Button,
   CssBaseline,
-  CircularProgress
+  CircularProgress,
+  FormHelperText,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Select
 } from "@material-ui/core";
-
-import MenuIcon from "@material-ui/icons/Menu";
-import happy from "./happy.gif";
-import sad from "./sad.gif";
 
 import styled from "styled-components";
 
 const NewWorkOrderHookForm = () => {
-  const StyledSelect = styled(Select)`
-    margin-top: 1em;
+  const headers = {
+    headers: {}
+  };
 
-    .MuiInput-underline {
-      border-bottom: 2px solid #0d3e79;
-    }
+  const StyledSelect = styled(Select)`
+    margin-bottom: 2em;
+  `;
+
+  const StyledRadioGroup = styled(RadioGroup)`
+    margin-bottom: 2em;
   `;
 
   const StyledTypography = styled(Typography)`
-    margin-top: 1em;
+    margin: 1em 0 1em 0;
   `;
 
   const StyledCircularProgress = styled(CircularProgress)`
     margin-top: 1em;
+    color: #0d3e79;
   `;
 
   const StyledButton = styled(Button)`
     margin-top: 1em;
+    background-color: #0d3e79;
+    color: white;
   `;
 
   const { register, control, handleSubmit, watch, errors } = useForm({
@@ -45,35 +53,38 @@ const NewWorkOrderHookForm = () => {
     }
   });
 
-  // const [isRendering, setIsRendering] = useState(false);
   const [name, setName] = useState(null);
   const [signals, setSignals] = useState(null);
 
-  // useEffect(() => {
-  //   if (isRendering) {
-  //     const happy = setTimeout(() => setIsRendering(false), 3000);
-  //     return () => clearTimeout(happy);
-  //   }
-
-  //   if (!!isRendering) {
-  //     const sad = setTimeout(() => setIsRendering(true), 3000);
-  //     return () => clearTimeout(sad);
-  //   }
-  // });
-
-  // const StyledImage = styled.img`
-  //   width: 200px;
-  //   height: 200px;
-  // `;
+  useEffect(() => {
+    axios
+      .get(
+        "https://api.knack.com/v1/objects/object_12/records?rows_per_page=1000",
+        headers
+      )
+      .then(res => {
+        setSignals(res.data.records);
+      });
+  }, []);
 
   const onSubmit = data => console.log(data);
 
   const assetTypes = [{ text: "Signal", value: "Signal" }];
 
-  // Let's start with Signal Type (maybe time for more types and dynamic form elements)
+  const problems = [
+    "LED Out",
+    "Communication Failure",
+    "Detection Failure",
+    "Digtess",
+    "Knockdown",
+    "Push Button Not Working",
+    "Signal Out or on Flash",
+    "Timing Issue",
+    "Visibility Issue",
+    "Other"
+  ];
 
-  // Work Type: Radios
-  // Problem reported: Single select
+  // Let's start with Signal Type (maybe time for more types and dynamic form elements)
   // Support Technician(s): Multi-select (fetched: scene_1048, view_2632, field_909)
   // Work Description: Text box
   // Requested by: Single select
@@ -85,18 +96,25 @@ const NewWorkOrderHookForm = () => {
     <Container>
       {/* {isRendering ? <StyledImage src={sad} /> : <StyledImage src={happy} />} */}
       <CssBaseline />
-      <StyledTypography variant="h4">New Work Order</StyledTypography>
+      <StyledTypography mx="1" variant="h4">
+        New Work Order
+      </StyledTypography>
       {/* <form onSubmit={handleSubmit(onSubmit)}> */}
       <form>
         {/* Asset Type: Single Select */}
+        <FormHelperText>Asset Type</FormHelperText>
         <Controller
           as={
             <StyledSelect
               id="assetType"
               fullWidth
+              placeholder="Asset Type"
               errors={errors.name ? true : false}
               helperText={errors.name ? errors.name.message : ""}
             >
+              <MenuItem value="" disabled>
+                Asset Type
+              </MenuItem>
               {assetTypes.map((asset, i) => (
                 <MenuItem key={i} value={asset.value}>
                   {asset.text}
@@ -109,10 +127,12 @@ const NewWorkOrderHookForm = () => {
           control={control}
           defaultValue=""
         />
+
         {/* errors will return when field validation fails  */}
         {errors.assetType && <span>This field is required</span>}
 
         {/* Signal: Single Select with autocomplete (fetched: scene_1042, view_2618, field_1060)   */}
+        <FormHelperText>Signal</FormHelperText>
         {signals ? (
           <Controller
             as={
@@ -122,9 +142,12 @@ const NewWorkOrderHookForm = () => {
                 errors={errors.name ? true : false}
                 helperText={errors.name ? errors.name.message : ""}
               >
+                <MenuItem value="" disabled>
+                  Signal
+                </MenuItem>
                 {signals.map((signal, i) => (
                   <MenuItem key={i} value={signal.id}>
-                    {signal.identifier}
+                    {signal.field_1058}
                   </MenuItem>
                 ))}
               </StyledSelect>
@@ -136,12 +159,62 @@ const NewWorkOrderHookForm = () => {
           />
         ) : (
           <>
+            <br />
             <StyledCircularProgress />
             <br />
           </>
         )}
+
         {/* errors will return when field validation fails  */}
         {errors.signal && <span>This field is required</span>}
+
+        {/* Work Type: Radios */}
+        <FormHelperText>Work Type</FormHelperText>
+        <StyledRadioGroup
+          aria-label="gender"
+          name="gender1"
+          innerRef={register}
+        >
+          <FormControlLabel
+            value="Trouble Call"
+            control={<Radio />}
+            label="Trouble Call"
+          />
+          <FormControlLabel
+            value="Scheduled Work"
+            control={<Radio />}
+            label="Scheduled Work"
+          />
+        </StyledRadioGroup>
+
+        {/* Problem reported: Single select */}
+        <FormHelperText>Problem Reported</FormHelperText>
+        <Controller
+          as={
+            <StyledSelect
+              id="problem"
+              fullWidth
+              errors={errors.name ? true : false}
+              helperText={errors.name ? errors.name.message : ""}
+            >
+              <MenuItem value="" disabled>
+                Problem Reported
+              </MenuItem>
+              {problems.map((problem, i) => (
+                <MenuItem key={i} value={problem}>
+                  {problem}
+                </MenuItem>
+              ))}
+            </StyledSelect>
+          }
+          name="problem"
+          rules={{ required: "this is required" }}
+          control={control}
+          defaultValue=""
+        />
+
+        {/* errors will return when field validation fails  */}
+        {errors.problem && <span>This field is required</span>}
 
         <StyledButton variant="contained" type="submit">
           Submit
