@@ -1,3 +1,7 @@
+# Discovery Day (6/26/2020): Building React form with `react-hook-form` and Material UI
+
+I explored building React forms with [react-hook-form](https://github.com/react-hook-form/react-hook-form) and [Material UI](https://github.com/mui-org/material-ui).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

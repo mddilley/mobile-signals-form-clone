@@ -21,8 +21,8 @@ import styled from "styled-components";
 const NewWorkOrderHookForm = () => {
   const headers = {
     headers: {
-      "X-Knack-Application-Id": `5e2216f0cbf8d9001616b034`,
-      "X-Knack-REST-API-KEY": `a2a2c170-3d1e-11ea-8e8f-b33bd6ed1258`
+      "X-Knack-Application-Id": ``,
+      "X-Knack-REST-API-KEY": ``
     }
   };
 
@@ -52,8 +52,7 @@ const NewWorkOrderHookForm = () => {
   const { register, control, handleSubmit, watch, errors } = useForm({
     defaultValues: {
       assetType: "",
-      signal: "",
-      problem: ""
+      signal: ""
     }
   });
 
@@ -89,6 +88,7 @@ const NewWorkOrderHookForm = () => {
   ];
 
   // Let's start with Signal Type (maybe time for more types and dynamic form elements)
+
   // Support Technician(s): Multi-select (fetched: scene_1048, view_2632, field_909)
   // Work Description: Text box
   // Requested by: Single select
